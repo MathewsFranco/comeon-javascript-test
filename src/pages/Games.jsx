@@ -5,6 +5,9 @@ import Layout from '../Layout';
 const Games = () => {
   const [userData, setUserData] = useState();
   const [games, setGames] = useState();
+  const [filteredCategory, setFilteredCategory] = useState(0);
+  const [filteredWord, setFilteredWord] = useState();
+
   const [categories, setCategories] = useState();
   const navigate = useNavigate();
 
@@ -53,6 +56,14 @@ const Games = () => {
       });
   };
 
+  const filterByCategory = (categoryId) => {
+    setFilteredCategory(categoryId);
+  };
+
+  const handleSearch = (e) => {
+    setFilteredWord(e.target.value.toLowerCase());
+  };
+
   useEffect(() => {
     checkCredentials();
     getGamesList();
@@ -93,7 +104,11 @@ const Games = () => {
           </div>
           <div className='four wide column'>
             <div className='search ui small icon input '>
-              <input type='text' placeholder='Search Game' />
+              <input
+                type='text'
+                placeholder='Search Game'
+                onChange={(e) => handleSearch(e)}
+              />
               <i className='search icon'></i>
             </div>
           </div>
@@ -105,25 +120,42 @@ const Games = () => {
             <div className='ui relaxed divided game items links'>
               {/* <!-- game item template --> */}
               {games &&
-                games.map((game) => (
-                  <div className='game item' key={game.code}>
-                    <div className='ui small image'>
-                      <img src={game.icon} alt='game-icon' />
-                    </div>
-                    <div className='content'>
-                      <div className='header'>
-                        <b className='name'>{game.name}</b>
+                games.map((game) => {
+                  const filteredByCategory =
+                    game.categoryIds.includes(filteredCategory);
+
+                  const filteredByword = filteredWord
+                    ? game.name.toLowerCase().includes(filteredWord)
+                    : true;
+                  return (
+                    <div
+                      className='game item'
+                      key={game.code}
+                      style={{
+                        display:
+                          filteredByCategory && filteredByword
+                            ? 'block'
+                            : 'none',
+                      }}
+                    >
+                      <div className='ui small image'>
+                        <img src={game.icon} alt='game-icon' />
                       </div>
-                      <div className='description'>{game.description}</div>
-                      <div className='extra'>
-                        <div className='play ui right floated secondary button inverted'>
-                          Play
-                          <i className='right chevron icon'></i>
+                      <div className='content'>
+                        <div className='header'>
+                          <b className='name'>{game.name}</b>
+                        </div>
+                        <div className='description'>{game.description}</div>
+                        <div className='extra'>
+                          <div className='play ui right floated secondary button inverted'>
+                            Play
+                            <i className='right chevron icon'></i>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               {/* <!-- end game item template --> */}
             </div>
           </div>
@@ -134,7 +166,11 @@ const Games = () => {
               {/* <!-- category item template --> */}
               {categories &&
                 categories.map((category) => (
-                  <div className='category item' key={category.id}>
+                  <div
+                    className='category item'
+                    key={category.id}
+                    onClick={() => filterByCategory(category.id)}
+                  >
                     <div className='content'>
                       <div className='header'>{category.name}</div>
                     </div>
