@@ -106,25 +106,23 @@ const Games = () => {
               {/* <!-- game item template --> */}
               {games &&
                 games.map((game) => (
-                  <>
-                    <div className='game item'>
-                      <div className='ui small image'>
-                        <img src={game.icon} alt='game-icon' />
+                  <div className='game item' key={game.code}>
+                    <div className='ui small image'>
+                      <img src={game.icon} alt='game-icon' />
+                    </div>
+                    <div className='content'>
+                      <div className='header'>
+                        <b className='name'>{game.name}</b>
                       </div>
-                      <div className='content'>
-                        <div className='header'>
-                          <b className='name'>{game.name}</b>
-                        </div>
-                        <div className='description'>{game.description}</div>
-                        <div className='extra'>
-                          <div className='play ui right floated secondary button inverted'>
-                            Play
-                            <i className='right chevron icon'></i>
-                          </div>
+                      <div className='description'>{game.description}</div>
+                      <div className='extra'>
+                        <div className='play ui right floated secondary button inverted'>
+                          Play
+                          <i className='right chevron icon'></i>
                         </div>
                       </div>
                     </div>
-                  </>
+                  </div>
                 ))}
               {/* <!-- end game item template --> */}
             </div>
@@ -136,7 +134,7 @@ const Games = () => {
               {/* <!-- category item template --> */}
               {categories &&
                 categories.map((category) => (
-                  <div className='category item'>
+                  <div className='category item' key={category.id}>
                     <div className='content'>
                       <div className='header'>{category.name}</div>
                     </div>
