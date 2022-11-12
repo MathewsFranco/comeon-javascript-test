@@ -4,6 +4,8 @@ import Layout from '../Layout';
 
 const Games = () => {
   const [userData, setUserData] = useState();
+  const [games, setGames] = useState();
+  const [categories, setCategories] = useState();
   const navigate = useNavigate();
 
   // check if user is logged in
@@ -17,6 +19,7 @@ const Games = () => {
     fetch('http://localhost:3001/games', { method: 'get' })
       .then((response) => response.json())
       .then((data) => {
+        setGames(data);
         console.log(`🚀 ~ games`, data);
       });
   };
@@ -24,6 +27,7 @@ const Games = () => {
     fetch('http://localhost:3001/categories', { method: 'get' })
       .then((response) => response.json())
       .then((data) => {
+        setCategories(data);
         console.log(`🚀 ~ categories`, data);
       });
   };
@@ -63,13 +67,19 @@ const Games = () => {
             <div className='ui list'>
               {/* <!-- player item template --> */}
               <div className='player item'>
-                <img className='ui avatar image' src='' alt='avatar' />
+                <img
+                  className='ui avatar image'
+                  src={userData && userData.avatar}
+                  alt='avatar'
+                />
 
                 <div className='content'>
                   <div className='header'>
-                    <b className='name'></b>
+                    <b className='name'>{userData && userData.name}</b>
                   </div>
-                  <div className='description event'></div>
+                  <div className='description event'>
+                    {userData && userData.event}
+                  </div>
                 </div>
               </div>
               {/* <!-- end player item template --> */}
@@ -94,23 +104,28 @@ const Games = () => {
 
             <div className='ui relaxed divided game items links'>
               {/* <!-- game item template --> */}
-              <div className='game item'>
-                <div className='ui small image'>
-                  <img src='' alt='game-icon' />
-                </div>
-                <div className='content'>
-                  <div className='header'>
-                    <b className='name'></b>
-                  </div>
-                  <div className='description'></div>
-                  <div className='extra'>
-                    <div className='play ui right floated secondary button inverted'>
-                      Play
-                      <i className='right chevron icon'></i>
+              {games &&
+                games.map((game) => (
+                  <>
+                    <div className='game item'>
+                      <div className='ui small image'>
+                        <img src={game.icon} alt='game-icon' />
+                      </div>
+                      <div className='content'>
+                        <div className='header'>
+                          <b className='name'>{game.name}</b>
+                        </div>
+                        <div className='description'>{game.description}</div>
+                        <div className='extra'>
+                          <div className='play ui right floated secondary button inverted'>
+                            Play
+                            <i className='right chevron icon'></i>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </>
+                ))}
               {/* <!-- end game item template --> */}
             </div>
           </div>
@@ -119,11 +134,14 @@ const Games = () => {
 
             <div className='ui selection animated list category items'>
               {/* <!-- category item template --> */}
-              <div className='category item'>
-                <div className='content'>
-                  <div className='header'></div>
-                </div>
-              </div>
+              {categories &&
+                categories.map((category) => (
+                  <div className='category item'>
+                    <div className='content'>
+                      <div className='header'>{category.name}</div>
+                    </div>
+                  </div>
+                ))}
               {/* <!-- end category item template --> */}
             </div>
           </div>
