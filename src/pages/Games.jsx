@@ -1,7 +1,60 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 
 const Games = () => {
+  const [userData, setUserData] = useState();
+  const navigate = useNavigate();
+
+  // check if user is logged in
+  const checkCredentials = () => {
+    const userData = JSON.parse(localStorage.getItem('credentials'));
+    console.log(`🚀 ~ userData`, userData);
+    userData ? setUserData(userData) : navigate('/login');
+  };
+
+  const getGamesList = () => {
+    fetch('http://localhost:3001/games', { method: 'get' })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`🚀 ~ games`, data);
+      });
+  };
+  const getCategoriesList = () => {
+    fetch('http://localhost:3001/categories', { method: 'get' })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(`🚀 ~ categories`, data);
+      });
+  };
+
+  const handleLogout = () => {
+    fetch('http://localhost:3001/logout', {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: userData.username,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 'success') {
+          localStorage.removeItem('credentials');
+          return navigate('/login');
+        }
+        return console.log('looks like you are trapped');
+      });
+  };
+
+  useEffect(() => {
+    checkCredentials();
+    getGamesList();
+    getCategoriesList();
+  }, []);
+
   return (
     <Layout>
       <div className='casino'>
@@ -21,7 +74,10 @@ const Games = () => {
               </div>
               {/* <!-- end player item template --> */}
             </div>
-            <div className='logout ui left floated secondary button inverted'>
+            <div
+              className='logout ui left floated secondary button inverted'
+              onClick={handleLogout}
+            >
               <i className='left chevron icon'></i>Log Out
             </div>
           </div>

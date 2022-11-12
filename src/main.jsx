@@ -8,14 +8,14 @@ import Login from './pages/Login';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Login />,
-  },
-  {
-    path: 'games',
     element: <Games />,
   },
   {
-    path: 'in_game',
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    path: '/in_game',
     element: <InGame />,
   },
 ]);

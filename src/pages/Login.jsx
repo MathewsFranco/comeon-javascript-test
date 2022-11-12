@@ -1,33 +1,67 @@
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../Layout';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const username = e.target[0].value;
+    const password = e.target[1].value;
+
+    fetch('http://localhost:3001/login', {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === 'success') {
+          console.log('data 🤞🏽', data);
+          localStorage.setItem(
+            'credentials',
+            JSON.stringify({ username, ...data.player })
+          );
+          return navigate('/');
+        }
+
+        console.log('Present failure');
+        return console.log('data 🤞🏽', data);
+      });
+  };
+
   return (
     <Layout>
-      <div class='login'>
-        <div class='ui grid centered'>
-          <form>
-            <div class='fields'>
-              <div class='required field'>
-                <div class='ui icon input'>
+      <div className='login'>
+        <div className='ui grid centered'>
+          <form onSubmit={handleSubmit}>
+            <div className='fields'>
+              <div className='required field'>
+                <div className='ui icon input'>
                   <input type='text' name='username' placeholder='Username' />
-                  <i class='user icon'></i>
+                  <i className='user icon'></i>
                 </div>
               </div>
-              <div class='required field'>
-                <div class='ui icon input'>
+              <div className='required field'>
+                <div className='ui icon input'>
                   <input
                     type='password'
                     name='password'
                     placeholder='Password'
                   />
-                  <i class='lock icon'></i>
+                  <i className='lock icon'></i>
                 </div>
               </div>
-              <div class='field'>
-                <div class='ui icon input'>
+              <div className='field'>
+                <div className='ui icon input'>
                   <input type='submit' value='Login' />
-                  <i class='right chevron icon'></i>
+                  <i className='right chevron icon'></i>
                 </div>
               </div>
             </div>
