@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useToast from '../hooks/useToast';
 import Layout from '../Layout';
 
 const Games = () => {
-  const [userData, setUserData] = useState();
-  const [games, setGames] = useState();
+  const [userData, setUserData] = useState([]);
+  const [games, setGames] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [filteredCategory, setFilteredCategory] = useState(0);
   const [filteredWord, setFilteredWord] = useState();
 
-  const [categories, setCategories] = useState();
   const navigate = useNavigate();
+  const { errorToast, successToast } = useToast();
 
   // check if user is logged in
   const checkCredentials = () => {
     const userData = JSON.parse(localStorage.getItem('credentials'));
-    console.log(`🚀 ~ userData`, userData);
     userData ? setUserData(userData) : navigate('/login');
   };
 
@@ -23,7 +24,6 @@ const Games = () => {
       .then((response) => response.json())
       .then((data) => {
         setGames(data);
-        console.log(`🚀 ~ games`, data);
       });
   };
   const getCategoriesList = () => {
@@ -31,7 +31,6 @@ const Games = () => {
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
-        console.log(`🚀 ~ categories`, data);
       });
   };
 
@@ -50,9 +49,10 @@ const Games = () => {
       .then((data) => {
         if (data.status === 'success') {
           localStorage.removeItem('credentials');
+          successToast('Logged out!');
           return navigate('/login');
         }
-        return console.log('looks like you are trapped');
+        errorToast('Oh no, looks like you are trapped');
       });
   };
 

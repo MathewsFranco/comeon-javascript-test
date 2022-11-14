@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
+import useToast from '../hooks/useToast';
 import Layout from '../Layout';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { errorToast, successToast } = useToast();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,16 +25,15 @@ const Login = () => {
       .then((response) => response.json())
       .then((data) => {
         if (data.status === 'success') {
-          console.log('data 🤞🏽', data);
           localStorage.setItem(
             'credentials',
             JSON.stringify({ username, ...data.player })
           );
+          successToast(`Welcome ${data.player.name}`);
           return navigate('/');
         }
 
-        console.log('Present failure');
-        return console.log('data 🤞🏽', data);
+        errorToast(data.error);
       });
   };
 
@@ -44,13 +45,19 @@ const Login = () => {
             <div className='fields'>
               <div className='required field'>
                 <div className='ui icon input'>
-                  <input type='text' name='username' placeholder='Username' />
+                  <input
+                    type='text'
+                    name='username'
+                    placeholder='Username'
+                    required
+                  />
                   <i className='user icon'></i>
                 </div>
               </div>
               <div className='required field'>
                 <div className='ui icon input'>
                   <input
+                    required
                     type='password'
                     name='password'
                     placeholder='Password'
