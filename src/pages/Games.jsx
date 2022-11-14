@@ -146,7 +146,10 @@ const Games = () => {
                           <b className='name'>{game.name}</b>
                         </div>
                         <div className='description'>{game.description}</div>
-                        <div className='extra'>
+                        <div
+                          className='extra'
+                          onClick={() => navigate(game.code)}
+                        >
                           <div className='play ui right floated secondary button inverted'>
                             Play
                             <i className='right chevron icon'></i>

@@ -15,7 +15,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/in_game',
+    path: '/:gameCode',
     element: <InGame />,
   },
 ]);
