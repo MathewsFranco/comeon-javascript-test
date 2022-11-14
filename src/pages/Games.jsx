@@ -138,6 +138,7 @@ const Games = () => {
                             : 'none',
                       }}
                     >
+                      {/* FIXME: The 'image' class makes it  not show on screen bigger them 992px of width*/}
                       <div className='ui small image'>
                         <img src={game.icon} alt='game-icon' />
                       </div>
@@ -164,7 +165,6 @@ const Games = () => {
           </div>
           <div className='four wide column'>
             <h3 className='ui dividing header'>Categories</h3>
-
             <div className='ui selection animated list category items'>
               {/* <!-- category item template --> */}
               {categories &&
