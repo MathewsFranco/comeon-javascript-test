@@ -138,8 +138,8 @@ const Games = () => {
                             : 'none',
                       }}
                     >
-                      {/* FIXME: The 'image' class makes it  not show on screen bigger them 992px of width*/}
-                      <div className='ui small image'>
+                      {/*FIXME: there was a class 'image' hiding this is width > 992 */}
+                      <div className='ui small '>
                         <img src={game.icon} alt='game-icon' />
                       </div>
                       <div className='content'>
