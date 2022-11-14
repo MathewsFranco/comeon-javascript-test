@@ -28,6 +28,12 @@ yarn
 
 4. Run the database
 
+If JSON server is not installed, run
+
+```javascript
+npm install -g json-server
+```
+
 ```
 json-server --watch mock/mock-data.json --port 3001 --middlewares mock/mock-api.js
 ```
